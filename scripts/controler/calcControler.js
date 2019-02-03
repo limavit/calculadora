@@ -27,9 +27,9 @@ class CalcControler{
         }, 10000); 
         só pra testar o pause depois de 10 segundos
         tivemos que salvar o id do setInterval dentro da variavel interval
-        */
-        
+        */       
     }
+    
     //criamos este evento para tratar multiplos eventos
     //EVENTO CUSTOMIZAVEL, NOS CRIAMOS. NAO EXISTE NO JAVASCRIPT
     addEventListenerAll(element, evetns, fn){
@@ -45,10 +45,46 @@ class CalcControler{
     calcelEntry(){
         this._operation.pop();
     }
+
+    getLastOperation(){
+        return this._operation[this._operation.length-1];
+    }
+
+    setLastOperation(value){
+        this._operation[this._operation.length-1] = value;
+    }
+
+    isOperator(value){
+
+        return (['+', '-', '/', '*', '%'].indexOf(value) > -1);
+
+    }
     addOperatoration(value){
-        this._operation.push(value);
+
+        if(isNaN(this.getLastOperation())){
+            //quando for string
+            console.log('A',isNaN(this.getLastOperation()));
+            if(this.isOperator(value)){
+                //trocar operador
+                this.setLastOperation(value)
+                
+            }else if(isNaN(value)){
+                
+                //outra coisa
+                console.log(value);
+            }else{
+                this._operation.push(value);
+            }
+        }else{
+            //se for number
+            let newValue = this.getLastOperation().toString() + value.toString();
+            this.setLastOperation(parseInt(newValue));
+            
+        }
+        //this._operation.push(value);
         console.log(this._operation);
     }
+
     setError(){
         this.displayCalc = "Error";
     }
@@ -61,17 +97,25 @@ class CalcControler{
             case 'ce':
                 this.calcelEntry();
                 break;
-            case 'soma':                
+            case 'soma':
+            this.addOperatoration('+');                
                 break;                       
             case 'subtracao':
+            this.addOperatoration('-'); 
                 break;
             case 'multiplicacao':
+            this.addOperatoration('*'); 
                 break;
             case 'divisao':
+            this.addOperatoration('/'); 
                 break; 
             case 'porcento':
+            this.addOperatoration('%'); 
                 break;
             case 'igual':
+                break;
+            case 'ponto':
+            this.addOperatoration('.'); 
                 break;
             case '0':
             case '1':
@@ -101,7 +145,7 @@ class CalcControler{
             this.addEventListenerAll(btn, 'click drag', e =>{
                 //usando o btn.className.baseVal pra ele pegar apenas o nome da classe
                 //usando o replace pra tirar o btn- e colocar nada no lugar
-                let textBtn = console.log(btn.className.baseVal.replace("btn-",""));
+                let textBtn = btn.className.baseVal.replace("btn-","");
 
                 this.execBtn(textBtn);
             });

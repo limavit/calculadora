@@ -59,11 +59,36 @@ class CalcControler{
         return (['+', '-', '/', '*', '%'].indexOf(value) > -1);
 
     }
-    addOperatoration(value){
+    pushOperation(value){
+        this._operation.push(value);
+        if(this._operation.length > 3){
+            
+            this.calc();
+            
+        }
+    }
+    calc(){
+        let last = this._operation.pop();
+        let result = eval(this._operation.join(""));
+        this._operation = [result, last];
+        this.setLastNumbeToDisplay();
+    }
+    setLastNumbeToDisplay(){
 
+        let lastNumber;
+        for (let index = this._operation.length - 1; index >= 0; index--) {
+            if(!this.isOperator(this._operation[index])){
+                lastNumber = this._operation[index];
+                break;
+            }            
+        }
+        this.displayCalc = lastNumber;
+    }
+    addOperatoration(value){
+        //console.log('A', value, isNaN(this.getLastOperation()));
         if(isNaN(this.getLastOperation())){
             //quando for string
-            console.log('A',isNaN(this.getLastOperation()));
+            
             if(this.isOperator(value)){
                 //trocar operador
                 this.setLastOperation(value)
@@ -71,18 +96,26 @@ class CalcControler{
             }else if(isNaN(value)){
                 
                 //outra coisa
-                console.log(value);
+                console.log('outra coisa', value);
             }else{
-                this._operation.push(value);
+                this.pushOperation(value);
+                this.setLastNumbeToDisplay();
             }
         }else{
-            //se for number
+            if(this.isOperator(value)){
+                this.pushOperation(value);
+            }else{
+                //se for number
             let newValue = this.getLastOperation().toString() + value.toString();
             this.setLastOperation(parseInt(newValue));
+
+            this.setLastNumbeToDisplay();
+            }
+            
             
         }
         //this._operation.push(value);
-        console.log(this._operation);
+        //console.log(this._operation);
     }
 
     setError(){

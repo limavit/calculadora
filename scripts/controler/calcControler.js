@@ -137,10 +137,6 @@ class CalcControler{
                 //trocar operador
                 this.setLastOperation(value)
                 
-            }else if(isNaN(value)){
-                
-                //outra coisa
-                console.log('outra coisa', value);
             }else{
                 this.pushOperation(value);
                 this.setLastNumberToDisplay();
@@ -151,7 +147,7 @@ class CalcControler{
             }else{
                 //se for number
             let newValue = this.getLastOperation().toString() + value.toString();
-            this.setLastOperation(parseInt(newValue));
+            this.setLastOperation(parseFloat(newValue));
 
             this.setLastNumberToDisplay();
             }
@@ -165,7 +161,19 @@ class CalcControler{
     setError(){
         this.displayCalc = "Error";
     }
+    
+    addDot(){
+        let lastOperarion = this.getLastOperation();
 
+        if(this.isOperator(lastOperarion) || !lastOperarion){
+            this.pushOperation('0.');
+        }else{
+
+            this.setLastOperation(lastOperarion.toString() + '.');
+        }
+        this.setLastNumberToDisplay();
+
+    }
     execBtn(value){
         switch (value) {
             case 'ac':
@@ -193,7 +201,7 @@ class CalcControler{
             this.calc();
                 break;
             case 'ponto':
-            this.addOperatoration('.'); 
+            this.addDot(); 
                 break;
             case '0':            
             case '1':

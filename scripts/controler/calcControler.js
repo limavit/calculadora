@@ -168,8 +168,16 @@ class CalcControler{
         }
     }
     getResult(){
+        try {
+            return eval(this._operation.join(""));    
+        } catch (error) {
+            setTimeout(()=>{
+                this.setError();
+            },1 );
+            
+        }
         
-        return eval(this._operation.join(""));
+        
     }
     calc(){
         let last = '';

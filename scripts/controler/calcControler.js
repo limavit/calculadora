@@ -43,7 +43,11 @@ class CalcControler{
     
     clearAll(){
         this._operation = [];
+        this._lastNumber = '';
+        this._lastOperator = ''
         this.setLastNumberToDisplay();
+
+        //this.displayCalc = 0;
     }
 
     calcelEntry(){
@@ -147,7 +151,7 @@ class CalcControler{
             }else{
                 //se for number
             let newValue = this.getLastOperation().toString() + value.toString();
-            this.setLastOperation(parseFloat(newValue));
+            this.setLastOperation(newValue);
 
             this.setLastNumberToDisplay();
             }
@@ -164,11 +168,10 @@ class CalcControler{
     
     addDot(){
         let lastOperarion = this.getLastOperation();
-
+        if(typeof(lastOperarion) === 'string' && lastOperarion.split('').indexOf('') > -1) return;
         if(this.isOperator(lastOperarion) || !lastOperarion){
             this.pushOperation('0.');
         }else{
-
             this.setLastOperation(lastOperarion.toString() + '.');
         }
         this.setLastNumberToDisplay();
